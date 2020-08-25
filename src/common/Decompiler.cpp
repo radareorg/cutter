@@ -33,7 +33,7 @@ void R2DecDecompiler::decompileAt(RVA addr)
     if (task) {
         return;
     }
-    task = new R2Task("pddj @ " + QString::number(addr));
+    task = new R2Task("pdgj @ " + QString::number(addr));
     connect(task, &R2Task::finished, this, [this]() {
         QJsonObject json = task->getResultJson().object();
         delete task;
@@ -44,35 +44,48 @@ void R2DecDecompiler::decompileAt(RVA addr)
         }
         RAnnotatedCode *code = r_annotated_code_new(nullptr);
         QString codeString = "";
-        for (const auto &line : json["log"].toArray()) {
-            if (!line.isString()) {
-                continue;
-            }
-            codeString.append(line.toString() + "\n");
+        // for (const auto &line : json["log"].toArray()) {
+        //     if (!line.isString()) {
+        //         continue;
+        //     }
+        //     codeString.append(line.toString() + "\n");
+        // }
+        if (json["code"].isString()) {
+            codeString.append(json["code"].toString());
         }
+        for (const auto &annotation : json["annotations"].toArray()) {
+            // if (!line.isString()) {
+            //     continue;
+            // }
+            // codeString.append(line.toString() + "\n");
+            auto Crad = annotation.toObject()["end"];
+            // if(Crad.isInt()){
+                int asdf = Crad.toInt();;
+            // }
+            auto xo = Crad;
+        }
+        // auto linesArray = json["lines"].toArray();
+        // for (const auto &line : linesArray) {
+        //     QJsonObject lineObject = line.toObject();
+        //     if (lineObject.isEmpty()) {
+        //         continue;
+        //     }
+        //     RCodeAnnotation annotationi = { 0 };
+        //     annotationi.start = codeString.length();
+        //     codeString.append(lineObject["str"].toString() + "\n");
+        //     annotationi.end = codeString.length();
+        //     bool ok;
+        //     annotationi.type = R_CODE_ANNOTATION_TYPE_OFFSET;
+        //     annotationi.offset.offset = lineObject["offset"].toVariant().toULongLong(&ok);
+        //     r_annotated_code_add_annotation(code, &annotationi);
+        // }
 
-        auto linesArray = json["lines"].toArray();
-        for (const auto &line : linesArray) {
-            QJsonObject lineObject = line.toObject();
-            if (lineObject.isEmpty()) {
-                continue;
-            }
-            RCodeAnnotation annotationi = { 0 };
-            annotationi.start = codeString.length();
-            codeString.append(lineObject["str"].toString() + "\n");
-            annotationi.end = codeString.length();
-            bool ok;
-            annotationi.type = R_CODE_ANNOTATION_TYPE_OFFSET;
-            annotationi.offset.offset = lineObject["offset"].toVariant().toULongLong(&ok);
-            r_annotated_code_add_annotation(code, &annotationi);
-        }
-
-        for (const auto &line : json["errors"].toArray()) {
-            if (!line.isString()) {
-                continue;
-            }
-            codeString.append(line.toString() + "\n");
-        }
+        // for (const auto &line : json["errors"].toArray()) {
+        //     if (!line.isString()) {
+        //         continue;
+        //     }
+        //     codeString.append(line.toString() + "\n");
+        // }
         std::string tmp = codeString.toStdString();
         code->code = strdup(tmp.c_str());
         emit finished(code);
