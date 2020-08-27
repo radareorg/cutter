@@ -58,11 +58,15 @@ void R2DecDecompiler::decompileAt(RVA addr)
             //     continue;
             // }
             // codeString.append(line.toString() + "\n");
-            auto Crad = annotation.toObject()["end"];
-            // if(Crad.isInt()){
-                int asdf = Crad.toInt();;
-            // }
-            auto xo = Crad;
+            RCodeAnnotation annote = {};
+            annote.start = annotation.toObject()["start"].toInt();
+            annote.end = annotation.toObject()["end"].toInt();
+            QString type = annotation.toObject()["type"].toString();
+            if (type == "offset"){
+                    annote.type = R_CODE_ANNOTATION_TYPE_OFFSET;
+                    annote.offset.offset = annotation.toObject()["offset"].toInt();
+                    r_annotated_code_add_annotation(code, &annote);
+            }
         }
         // auto linesArray = json["lines"].toArray();
         // for (const auto &line : linesArray) {
