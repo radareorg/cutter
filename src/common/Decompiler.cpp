@@ -28,12 +28,17 @@ bool R2DecDecompiler::isAvailable()
     return Core()->cmdList("e cmd.pdc=?").contains(QStringLiteral("pdd"));
 }
 
+static char *jsonValueToString(QJsonValue &str)
+{
+    return strdup(str.toString().toStdString().c_str());
+}
+
 void R2DecDecompiler::decompileAt(RVA addr)
 {
     if (task) {
         return;
     }
-    task = new R2Task("pdgj @ " + QString::number(addr));
+    task = new R2Task("pddA @ " + QString::number(addr));
     connect(task, &R2Task::finished, this, [this]() {
         QJsonObject json = task->getResultJson().object();
         delete task;
@@ -43,30 +48,48 @@ void R2DecDecompiler::decompileAt(RVA addr)
             return;
         }
         RAnnotatedCode *code = r_annotated_code_new(nullptr);
-        QString codeString = "";
+        QString codeString = json["code"].toString();
         // for (const auto &line : json["log"].toArray()) {
         //     if (!line.isString()) {
         //         continue;
         //     }
         //     codeString.append(line.toString() + "\n");
         // }
-        if (json["code"].isString()) {
-            codeString.append(json["code"].toString());
-        }
-        for (const auto &annotation : json["annotations"].toArray()) {
+        // if (json["code"].isString()) {
+        //     codeString.append(json["code"].toString());
+        // }
+        for (const auto &iter : json["annotations"].toArray()) {
             // if (!line.isString()) {
             //     continue;
             // }
             // codeString.append(line.toString() + "\n");
-            RCodeAnnotation annote = {};
-            annote.start = annotation.toObject()["start"].toInt();
-            annote.end = annotation.toObject()["end"].toInt();
-            QString type = annotation.toObject()["type"].toString();
-            if (type == "offset"){
-                    annote.type = R_CODE_ANNOTATION_TYPE_OFFSET;
-                    annote.offset.offset = annotation.toObject()["offset"].toInt();
-                    r_annotated_code_add_annotation(code, &annote);
+            QJsonObject jsonAnnotation = iter.toObject();
+            RCodeAnnotation annotation = {};
+            annotation.start = jsonAnnotation["start"].toInt();
+            annotation.end = jsonAnnotation["end"].toInt();
+            QString type = jsonAnnotation["type"].toString();
+            bool ok;
+            if (type == "offset") {
+                annotation.type = R_CODE_ANNOTATION_TYPE_OFFSET;
+                annotation.offset.offset = jsonAnnotation["offset"].toString().toULongLong(&ok);
+            } else if (type == "function_name") {
+                annotation.type = R_CODE_ANNOTATION_TYPE_FUNCTION_NAME;
+                annotation.reference.name = jsonValueToString(jsonAnnotation["name"]);
+                annotation.reference.offset = jsonAnnotation["offset"].toString().toULongLong(&ok);
+            } else if (type == "global_variable") {
+                annotation.type = R_CODE_ANNOTATION_TYPE_GLOBAL_VARIABLE;
+                annotation.reference.offset = jsonAnnotation["offset"].toString().toULongLong(&ok);
+            } else if (type == "constant_variable") {
+                annotation.type = R_CODE_ANNOTATION_TYPE_CONSTANT_VARIABLE;
+                annotation.reference.offset = jsonAnnotation["offset"].toString().toULongLong(&ok);
+            } else if (type == "local_variable") {
+                annotation.type = R_CODE_ANNOTATION_TYPE_LOCAL_VARIABLE;
+                annotation.variable.name = jsonValueToString(jsonAnnotation["name"]);
+            } else if (type == "function_parameter") {
+                annotation.type = R_CODE_ANNOTATION_TYPE_FUNCTION_PARAMETER;
+                annotation.variable.name = jsonValueToString(jsonAnnotation["name"]);
             }
+            r_annotated_code_add_annotation(code, &annotation);
         }
         // auto linesArray = json["lines"].toArray();
         // for (const auto &line : linesArray) {
@@ -90,8 +113,8 @@ void R2DecDecompiler::decompileAt(RVA addr)
         //     }
         //     codeString.append(line.toString() + "\n");
         // }
-        std::string tmp = codeString.toStdString();
-        code->code = strdup(tmp.c_str());
+        // std::string tmp = codeString.toStdString();
+        code->code = strdup(codeString.toStdString().c_str());
         emit finished(code);
     });
     task->startTask();
