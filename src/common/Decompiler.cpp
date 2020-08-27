@@ -28,7 +28,7 @@ bool R2DecDecompiler::isAvailable()
     return Core()->cmdList("e cmd.pdc=?").contains(QStringLiteral("pdd"));
 }
 
-static char *jsonValueToString(QJsonValue &str)
+static char *jsonValueToString(const QJsonValue &str)
 {
     return strdup(str.toString().toStdString().c_str());
 }
