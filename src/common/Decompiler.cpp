@@ -88,6 +88,26 @@ void R2DecDecompiler::decompileAt(RVA addr)
             } else if (type == "function_parameter") {
                 annotation.type = R_CODE_ANNOTATION_TYPE_FUNCTION_PARAMETER;
                 annotation.variable.name = jsonValueToString(jsonAnnotation["name"]);
+            } else if (type == "syntax_highlight") {
+                annotation.type = R_CODE_ANNOTATION_TYPE_SYNTAX_HIGHLIGHT;
+                QString highlightType = jsonAnnotation["syntax_highlight"].toString();
+                if (highlightType == "keyword") {
+                    annotation.syntax_highlight.type = R_SYNTAX_HIGHLIGHT_TYPE_KEYWORD;
+                } else if (highlightType == "comment") {
+                    annotation.syntax_highlight.type = R_SYNTAX_HIGHLIGHT_TYPE_COMMENT;
+                } else if (highlightType == "datatype") {
+                    annotation.syntax_highlight.type = R_SYNTAX_HIGHLIGHT_TYPE_DATATYPE;
+                } else if (highlightType == "function_name") {
+                    annotation.syntax_highlight.type = R_SYNTAX_HIGHLIGHT_TYPE_FUNCTION_NAME;
+                } else if (highlightType == "function_parameter") {
+                    annotation.syntax_highlight.type = R_SYNTAX_HIGHLIGHT_TYPE_FUNCTION_PARAMETER;
+                } else if (highlightType == "local_variable") {
+                    annotation.syntax_highlight.type = R_SYNTAX_HIGHLIGHT_TYPE_LOCAL_VARIABLE;
+                } else if (highlightType == "constant_variable") {
+                    annotation.syntax_highlight.type = R_SYNTAX_HIGHLIGHT_TYPE_CONSTANT_VARIABLE;
+                } else if (highlightType == "global_variable") {
+                    annotation.syntax_highlight.type = R_SYNTAX_HIGHLIGHT_TYPE_GLOBAL_VARIABLE;
+                }
             }
             r_annotated_code_add_annotation(code, &annotation);
         }
