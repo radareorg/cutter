@@ -56,20 +56,19 @@ void R2DecDecompiler::decompileAt(RVA addr)
             annotation.start = jsonAnnotation["start"].toInt();
             annotation.end = jsonAnnotation["end"].toInt();
             QString type = jsonAnnotation["type"].toString();
-            bool ok;
             if (type == "offset") {
                 annotation.type = R_CODE_ANNOTATION_TYPE_OFFSET;
-                annotation.offset.offset = jsonAnnotation["offset"].toString().toULongLong(&ok);
+                annotation.offset.offset = jsonAnnotation["offset"].toString().toULongLong();
             } else if (type == "function_name") {
                 annotation.type = R_CODE_ANNOTATION_TYPE_FUNCTION_NAME;
                 annotation.reference.name = jsonValueToString(jsonAnnotation["name"]);
-                annotation.reference.offset = jsonAnnotation["offset"].toString().toULongLong(&ok);
+                annotation.reference.offset = jsonAnnotation["offset"].toString().toULongLong();
             } else if (type == "global_variable") {
                 annotation.type = R_CODE_ANNOTATION_TYPE_GLOBAL_VARIABLE;
-                annotation.reference.offset = jsonAnnotation["offset"].toString().toULongLong(&ok);
+                annotation.reference.offset = jsonAnnotation["offset"].toString().toULongLong();
             } else if (type == "constant_variable") {
                 annotation.type = R_CODE_ANNOTATION_TYPE_CONSTANT_VARIABLE;
-                annotation.reference.offset = jsonAnnotation["offset"].toString().toULongLong(&ok);
+                annotation.reference.offset = jsonAnnotation["offset"].toString().toULongLong();
             } else if (type == "local_variable") {
                 annotation.type = R_CODE_ANNOTATION_TYPE_LOCAL_VARIABLE;
                 annotation.variable.name = jsonValueToString(jsonAnnotation["name"]);
