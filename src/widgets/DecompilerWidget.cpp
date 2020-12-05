@@ -475,8 +475,12 @@ void DecompilerWidget::showDecompilerContextMenu(const QPoint &pt)
 void DecompilerWidget::seekToReference()
 {
     size_t pos = ui->textEdit->textCursor().position();
-    RVA offset = offsetForPosition(pos);
-    seekable->seekToReference(offset);
+    // RVA offset = offsetForPosition(pos);
+    // seekable->seekToReference(offset);
+    RCodeAnnotation *annotationHere = mCtxMenu->getAnnotationHere();
+    if (annotationHere && r_annotation_is_reference(annotationHere)) {
+        seekable->seek(annotationHere->reference.offset);
+    }
 }
 
 bool DecompilerWidget::eventFilter(QObject *obj, QEvent *event)

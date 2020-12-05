@@ -19,6 +19,7 @@ public:
 
     bool getIsTogglingBreakpoints();
     void setAnnotationHere(RCodeAnnotation *annotation);
+    RCodeAnnotation *getAnnotationHere();
     RVA getFirstOffsetInLine();
 
 signals:

@@ -76,6 +76,11 @@ void DecompilerContextMenu::setAnnotationHere(RCodeAnnotation *annotation)
     annotationHere = annotation;
 }
 
+RCodeAnnotation *DecompilerContextMenu::getAnnotationHere()
+{
+    return annotationHere;
+}
+
 void DecompilerContextMenu::setCurHighlightedWord(QString word)
 {
     curHighlightedWord = word;
