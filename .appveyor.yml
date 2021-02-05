@@ -49,12 +49,14 @@ build_script:
        -DCUTTER_PACKAGE_JSDEC=ON
        -DCUTTER_ENABLE_DEPENDENCY_DOWNLOADS=ON
        -DCUTTER_ENABLE_CRASH_REPORTS=ON
+       -DCUTTER_ENABLE_TESTS=ON
        -DCMAKE_PREFIX_PATH=%CUTTER_DEPS%\\pyside
        -DCPACK_PACKAGE_FILE_NAME=%PACKAGE_NAME%
        -G Ninja
        .."
   - cmd: cmake --build . --config Release
   - cmd: cmake --build . --config Release --target package
+  - cmd: src/test/CutterTest
 
 # Tests
 test: off

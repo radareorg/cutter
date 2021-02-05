@@ -30,7 +30,7 @@
 #    include <RzGhidraDecompiler.h>
 #endif
 
-CutterApplication::CutterApplication(int &argc, char **argv) : QApplication(argc, argv)
+CutterApplication::CutterApplication(int &argc, char **argv, bool test) : QApplication(argc, argv)
 {
     // Setup application information
     setApplicationVersion(CUTTER_VERSION_FULL);
@@ -125,7 +125,7 @@ CutterApplication::CutterApplication(int &argc, char **argv) : QApplication(argc
         plugin->registerDecompilers();
     }
 
-    mainWindow = new MainWindow();
+    mainWindow = new MainWindow(nullptr, test);
     installEventFilter(mainWindow);
 
     // set up context menu shortcut display fix
@@ -133,7 +133,7 @@ CutterApplication::CutterApplication(int &argc, char **argv) : QApplication(argc
     setStyle(new CutterProxyStyle());
 #endif // QT_VERSION_CHECK(5, 10, 0) < QT_VERSION
 
-    if (clOptions.args.empty()) {
+    if (clOptions.args.empty() && !test) {
         // check if this is the first execution of Cutter in this computer
         // Note: the execution after the preferences been reset, will be considered as
         // first-execution
@@ -141,7 +141,7 @@ CutterApplication::CutterApplication(int &argc, char **argv) : QApplication(argc
             mainWindow->displayWelcomeDialog();
         }
         mainWindow->displayNewFileDialog();
-    } else { // filename specified as positional argument
+    } else if (!test) { // filename specified as positional argument
         bool askOptions = clOptions.analLevel != AutomaticAnalysisLevel::Ask;
         mainWindow->openNewFile(clOptions.fileOpenOptions, askOptions);
     }
