@@ -674,10 +674,12 @@ bool CutterCore::mapFile(QString path, RVA mapaddr)
 {
     CORE_LOCK();
     RVA addr = mapaddr != RVA_INVALID ? mapaddr : 0;
-    ut64 baddr =
-            Core()->getFileInfo().object()["bin"].toObject()["baddr"].toVariant().toULongLong();
+    RzBinInfo *info = rz_bin_get_info(Core()->core()->bin);
+    if (!info) {
+        return false;
+    }
     if (rz_core_file_open(core, path.toUtf8().constData(), RZ_PERM_RX, addr)) {
-        rz_core_bin_load(core, path.toUtf8().constData(), baddr);
+        rz_core_bin_load(core, path.toUtf8().constData(), info->baddr);
     } else {
         return false;
     }
@@ -1307,11 +1309,6 @@ bool CutterCore::registerDecompiler(Decompiler *decompiler)
     decompiler->setParent(this);
     decompilers.push_back(decompiler);
     return true;
-}
-
-QJsonDocument CutterCore::getFileInfo()
-{
-    return cmdj("ij");
 }
 
 QJsonDocument CutterCore::getFileVersionInfo()

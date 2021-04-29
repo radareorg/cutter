@@ -475,7 +475,6 @@ public:
     bool registerDecompiler(Decompiler *decompiler);
 
     RVA getOffsetJump(RVA addr);
-    QJsonDocument getFileInfo();
     QJsonDocument getSignatureInfo();
     QJsonDocument getFileVersionInfo();
     QStringList getStats();

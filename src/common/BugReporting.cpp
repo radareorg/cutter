@@ -12,22 +12,23 @@ void openIssue()
     // Pull in info needed for git issue
     osInfo = QSysInfo::productType() + " "
             + (QSysInfo::productVersion() == "unknown" ? "" : QSysInfo::productVersion());
-    QJsonDocument docu = Core()->getFileInfo();
-    QJsonObject coreObj = docu.object()["core"].toObject();
-    QJsonObject binObj = docu.object()["bin"].toObject();
-    if (!binObj.QJsonObject::isEmpty()) {
-        format = coreObj["format"].toString();
-        arch = binObj["arch"].toString();
-        if (!binObj["type"].isUndefined()) {
-            type = coreObj["type"].toString();
-        } else {
-            type = "N/A";
-        }
-    } else {
-        format = coreObj["format"].toString();
-        arch = "N/A";
-        type = "N/A";
-    }
+    //RzBinInfo *info = Core()->getFileInfo();
+    // TODO !
+    //QJsonObject coreObj = docu.object()["core"].toObject();
+    //QJsonObject binObj = docu.object()["bin"].toObject();
+    //if (!binObj.QJsonObject::isEmpty()) {
+    //    format = coreObj["format"].toString();
+    //    arch = binObj["arch"].toString();
+    //    if (!binObj["type"].isUndefined()) {
+    //        type = coreObj["type"].toString();
+    //    } else {
+    //        type = "N/A";
+    //    }
+    //} else {
+    //    format = coreObj["format"].toString();
+    //    arch = "N/A";
+    //    type = "N/A";
+    //}
     url = "https://github.com/rizinorg/cutter/issues/new?&body=**Environment information**\n* "
           "Operating System: "
             + osInfo + "\n* Cutter version: " + CUTTER_VERSION_FULL + "\n* File format: " + format
