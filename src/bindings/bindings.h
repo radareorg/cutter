@@ -7,6 +7,7 @@
 #include "../core/Cutter.h"
 #include "../common/Configuration.h"
 #include "../core/MainWindow.h"
+#include "../CutterApplication.h"
 #include "../widgets/CutterDockWidget.h"
 #include "../plugins/CutterPlugin.h"
 #include "../menus/AddressableItemContextMenu.h"
