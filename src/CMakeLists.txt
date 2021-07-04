@@ -571,8 +571,11 @@ endforeach()
 
 if(UNIX AND NOT APPLE)
     install (FILES "img/cutter.svg"
-                DESTINATION "share/icons/hicolor/scalable/apps/")
+        DESTINATION "share/icons/hicolor/scalable/apps/")
     install(FILES "re.rizin.cutter.desktop"
-        DESTINATION "share/applications"
-        COMPONENT Devel)
+        DESTINATION "share/applications")
+    install(FILES "re.rizin.cutter.appdata.xml"
+        DESTINATION "share/metainfo")
+    install(FILES "cutter.1"
+        DESTINATION "share/man/man1")
 endif()
