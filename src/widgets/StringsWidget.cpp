@@ -214,10 +214,8 @@ StringsWidget::StringsWidget(MainWindow *main)
     });
 
     auto header = ui->stringsTreeView->header();
-    header->setSectionResizeMode(QHeaderView::ResizeMode::ResizeToContents);
-    header->setSectionResizeMode(StringsModel::StringColumn, QHeaderView::ResizeMode::Stretch);
-    header->setStretchLastSection(false);
-    header->setResizeContentsPrecision(256);
+    header->setSectionResizeMode(QHeaderView::ResizeMode::Interactive);
+    header->resizeSections(QHeaderView::ResizeMode::Stretch);
 }
 
 StringsWidget::~StringsWidget() {}
