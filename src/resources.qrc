@@ -89,7 +89,18 @@
         <file>img/icons/transfer.svg</file>
         <file>img/icons/transfer_white.svg</file>
         <file>img/icons/spin_light.svg</file>
-        <file>img/icons/import_light.svg</file>
+        <file>img/icons/function_light.svg</file>
+        <file>img/icons/function_import_light.svg</file>
+        <file>img/icons/function_entry_light.svg</file>
+        <file>img/icons/function_export_light.svg</file>
+        <file>img/icons/function_tlscb_light.svg</file>
+        <file>img/icons/function_main_light.svg</file>
+        <file>img/icons/function_dark.svg</file>
+        <file>img/icons/function_import_dark.svg</file>
+        <file>img/icons/function_entry_dark.svg</file>
+        <file>img/icons/function_export_dark.svg</file>
+        <file>img/icons/function_tlscb_dark.svg</file>
+        <file>img/icons/function_main_dark.svg</file>
         <file>img/icons/home.svg</file>
         <file>fonts/Anonymous Pro.ttf</file>
         <file>fonts/Inconsolata-Regular.ttf</file>

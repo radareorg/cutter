@@ -28,6 +28,13 @@ private:
 
     int currentIndex;
 
+    QIcon iconFuncImpDark;
+    QIcon iconFuncImpLight;
+    QIcon iconFuncMainDark;
+    QIcon iconFuncMainLight;
+    QIcon iconFuncDark;
+    QIcon iconFuncLight;
+
     bool functionIsImport(ut64 addr) const;
 
     bool functionIsMain(ut64 addr) const;
