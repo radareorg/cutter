@@ -429,6 +429,7 @@ endif()
 
 if (WIN32)
     set(PLATFORM_RESOURCES "img/cutter.rc")
+    set(OPTIONS WIN32)
 else()
     set(PLATFORM_RESOURCES "")
 endif()
@@ -440,7 +441,7 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
 endif()
 
 
-add_executable(Cutter ${UI_FILES} ${QRC_FILES} ${PLATFORM_RESOURCES} ${SOURCES} ${HEADER_FILES} ${BINDINGS_SOURCE})
+add_executable(Cutter ${OPTIONS} ${UI_FILES} ${QRC_FILES} ${PLATFORM_RESOURCES} ${SOURCES} ${HEADER_FILES} ${BINDINGS_SOURCE})
 set_target_properties(Cutter PROPERTIES
         OUTPUT_NAME cutter
         RUNTIME_OUTPUT_DIRECTORY ..
